@@ -10,19 +10,30 @@ By default, GraphMaker runs completely headless and features saving plots with i
 GraphMaker requires Python 3, `numpy`, and `matplotlib`. For the highest quality fonts, a local LaTeX distribution is highly recommended.
 
 **1.1 Fedora**
-`sudo dnf install python3 python3-pip`
+```
+sudo dnf install python3 python3-pip
+```
 optional:
-`sudo dnf install texlive-scheme-full`
-
+```
+sudo dnf install texlive-scheme-full
+```
 **1.2 Arch Linux**
-`sudo pacman -S python python-pip texlive-full`
+```
+sudo pacman -S python python-pip texlive-full
+```
 
 **1.3 Debian**
-`sudo apt update`
-`sudo apt install python3 python3-pip texlive-full dvipng ghostscript`
+```
+sudo apt update
+```
+```
+sudo apt install python3 python3-pip texlive-full dvipng ghostscript
+```
 
 **2. Install Python libraries**
-`pip3 install numpy matplotlib`
+```
+pip3 install numpy matplotlib
+```
 
 ### Windows
 Figure it out yourself. 
@@ -34,15 +45,26 @@ Figure it out yourself.
 To run GraphMaker from any folder on your system without typing `python3 path/to/graphmaker.py`, copy a bash wrapper and script to your home directory:
 
 1. Copy scripts:
-   `cp graphmaker ~/.bin/`
-   `cp graphmaker.py ~/.bin/`
-   
+```
+cp graphmaker ~/.bin/
+```
+```
+cp graphmaker.py ~/.bin/
+```
+
 2. Make it executable:
-   `chmod +x ~/.bin/graphmaker`
+```
+chmod +x ~/.bin/graphmaker
+```
 
 3. Refresh your shell
-    `source ~/.bashrc`
-    `source ~/.zshrc`
+```
+source ~/.bashrc
+```
+or
+```
+source ~/.zshrc
+```
 ---
 
 ## CSV Format Expectation
