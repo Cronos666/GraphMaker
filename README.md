@@ -117,9 +117,9 @@ Opens the Matplotlib GUI window and sets custom axis labels.
 graphmaker -f curietemp.csv -l -xl "Inductance [H]" -yl "Temperature [K]" --show
 ```
 **3. Multi-File Comparison with Unit Scaling & Legend**
-Plots three datasets on the same graph, scales the X-axis by 10^-3 (to show millimeters instead of meters), customizes the legend names, toggles the legend ON, and saves silently.
+Plots three datasets on the same graph, scales the X-axis by 10^-3 (to show millimeters instead of meters), uses latex in `x_label`, customizes the legend names, toggles the legend ON, and saves silently.
 ```
-graphmaker -f data1.csv data2.csv data3.csv -n "Spring A" "Spring B" "Spring C" -xe -3 -xl "Distance [mm]" -le
+graphmaker -f data1.csv data2.csv data3.csv -n "Set A" "Set B" "Set C" -xe -3 -xl "$\lambda$ [mm]" -le
 ```
 **4. The "No LaTeX" Fallback**
 If you are running this on a fresh machine that doesn't have TeX Live installed, use this flag to prevent crashes and fall back to standard fonts.
