@@ -19,7 +19,12 @@ sudo dnf install texlive-scheme-full
 ```
 **1.2 Arch Linux**
 ```
-sudo pacman -S python python-pip texlive-full
+sudo pacman -S python python-pip
+```
+optional:
+
+```
+sudo pacman -S texlive-full
 ```
 
 **1.3 Debian**
@@ -27,9 +32,13 @@ sudo pacman -S python python-pip texlive-full
 sudo apt update
 ```
 ```
-sudo apt install python3 python3-pip texlive-full dvipng ghostscript
+sudo apt install python3 python3-pip
 ```
+optional:
 
+```
+sudo apt install texlive-full dvipng ghostscript
+```
 **2. Install Python libraries**
 ```
 pip3 install numpy matplotlib
