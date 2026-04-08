@@ -86,7 +86,7 @@ class Data:
         self.r = r
 
 def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
-          use_tex_font='True',font_size=18,
+          use_tex_font=True, font_size=18, legend=False,
           graph_x=10, graph_y=6, show_plot=False,
           msize=8, barsize=5, padding_m = 0.5):
 
@@ -145,8 +145,9 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
             y_line = data.a * x_line + data.b
 
             ax.plot(x_line/x_scale, y_line/y_scale, '--', color=c, linewidth=2)
-    
-    ax.legend(loc='best')
+   
+    if legend:
+        ax.legend(loc='best')
     plt.tight_layout()
     if show_plot:
         plt.show()
@@ -182,6 +183,8 @@ if __name__ == "__main__":
     parser.add_argument('--show', action='store_true', help="Show GUI")
 
     parser.add_argument('--no-tex', action='store_false', dest='use_tex', help="Disable LaTeX font rendering")
+
+    parser.add_argument('-le','--legend', action='store_true', dest='legend', help="Show legend box on the graph")
 
     args = parser.parse_args()
 
@@ -244,4 +247,4 @@ if __name__ == "__main__":
                 print(f"b  = {d.b:.8f} +/- {d.db:.8f}")
                 print(f"r  = {d.r:.8f}")
     #EXECUTION           
-    plotf(datasets, args.xlabel, args.ylabel, args.x_exp, args.y_exp, show_plot=args.show,padding_m=args.padding, use_tex_font=args.use_tex)
+    plotf(datasets, args.xlabel, args.ylabel, args.x_exp, args.y_exp, legend=args.legend, show_plot=args.show,padding_m=args.padding, use_tex_font=args.use_tex)
