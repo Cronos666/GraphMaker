@@ -83,7 +83,7 @@ GraphMaker automatically detects your data format based on the number of columns
 * **2 Columns:** `X, Y` (Uncertainties default to 0)
 * **4 Columns:** `X, X_err, Y, Y_err` 
 
-**Example**
+**Example with uncertainties**
 | T | dT | L | dL |
 | :---: | :---: | :---: | :---: |
 | 25 | 1 | 5.13 | 0.05 |
