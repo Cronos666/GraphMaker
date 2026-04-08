@@ -107,16 +107,19 @@ Call `graphmaker` followed by your desired flags.
 ### Examples
 
 **1. The Quick Check (Silent)**
+
 Reads a single file, calculates linear regression, and saves `fig01.png` in the current directory.
 ```
 graphmaker -f data.csv -l
 ```
 **2. Interactive Mode with Labels**
+
 Opens the Matplotlib GUI window and sets custom axis labels.
 ```
 graphmaker -f curietemp.csv -l -xl "Inductance [H]" -yl "Temperature [K]" --show
 ```
 **3. Multi-File Comparison with Unit Scaling & Legend**
+
 Plots three datasets on the same graph, scales the X-axis by 10^-3 (to show millimeters instead of meters), uses latex in `x_label`, customizes the legend names, toggles the legend ON, and saves silently.
 ```
 graphmaker -f data1.csv data2.csv data3.csv -n "Set A" "Set B" "Set C" -xe -3 -xl "$\lambda$ [mm]" -le
