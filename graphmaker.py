@@ -190,7 +190,7 @@ if __name__ == "__main__":
 
     for i, file_path in enumerate(args.files):
         try:
-            raw_data = np.loadtxt(file_path, delimiter=';', skiprows=1)
+            raw_data = np.loadtxt(file_path, delimiter=',', skiprows=1)
         except FileNotFoundError:
             print(f"Error: Could not find the file '{file_path}'. Skipping file")
             continue # Skip to the next file instead of crashing the whole script
