@@ -91,4 +91,29 @@ Call `graphmaker` followed by your desired flags.
 ### Label & Scaling Flags
 * `-xl`, `--xlabel` : Custom label for the X axis (Default: "x").
 * `-yl`, `--ylabel` : Custom label for the Y axis (Default: "y").
-* `-xe`, `--x_exp` : Divide X data by 10^exp for the graph (
+* `-xe`, `--x_exp` : Divide X data by 10^exp for the graph (`-xe 3` converts meters to kilometers on the plot, while keeping terminal math in base SI units).
+* `-ye`, `--y_exp` : Divide Y data by 10^exp for the graph.
+* `-p`, `--padding` : Padding multiplier for the regression line extension (Default: 0.1).
+
+### Examples
+
+**1. The Quick Check (Silent)**
+Reads a single file, calculates linear regression, and saves `fig01.png` in the current directory.
+```
+graphmaker -f data.csv -l
+```
+**2. Interactive Mode with Labels**
+Opens the Matplotlib GUI window and sets custom axis labels.
+```
+graphmaker -f curietemp.csv -l -xl "Inductance [H]" -yl "Temperature [K]" --show
+```
+**3. Multi-File Comparison with Unit Scaling & Legend**
+Plots three datasets on the same graph, scales the X-axis by 10^-3 (to show millimeters instead of meters), customizes the legend names, toggles the legend ON, and saves silently.
+```
+graphmaker -f data1.csv data2.csv data3.csv -n "Spring A" "Spring B" "Spring C" -xe -3 -xl "Distance [mm]" -le
+```
+**4. The "No LaTeX" Fallback**
+If you are running this on a fresh machine that doesn't have TeX Live installed, use this flag to prevent crashes and fall back to standard fonts.
+```
+graphmaker -f data.csv --no-tex --show
+```
