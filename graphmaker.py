@@ -93,7 +93,7 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
     #FONT
     if(use_tex_font):
         plt.rcParams['text.usetex'] = True
-        plt.rcParams['text.latex.preamble'] = r'\usepackage{mathptmx}'
+        plt.rcParams['text.latex.preamble'] = r'\usepackage[T1]{fontenc}\usepackage[utf8]{inputenc}\usepackage{mathptmx}'
         plt.rcParams['font.family'] = 'serif'
     plt.rcParams['font.size'] = font_size
 
@@ -117,6 +117,10 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
     #EXPONENTS
     x_scale = np.float128(10**x_exp)
     y_scale = np.float128(10**y_exp)
+   
+    x_min = min(min(d.x_data) for d in data_array)
+    x_max = max(max(d.x_data) for d in data_array)
+    padding = (x_max - x_min)*padding_m
 
     for n, data in enumerate(data_array):
         c = color[n%len(color)]
@@ -137,9 +141,7 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
                 )
 
         if data.linear:
-            x_min = min(data.x_data)
-            x_max = max(data.x_data)
-            padding = (x_max - x_min)*padding_m
+        
             
             x_line = np.linspace(x_min - padding, x_max + padding, 100)
             y_line = data.a * x_line + data.b
@@ -221,6 +223,7 @@ if __name__ == "__main__":
             current_name = args.names[i]
         else:
             current_name = file_path.replace('.csv', '')
+            current_name = current_name.replace('_', ' ')
 
         try:
             dataset = Data(
@@ -240,11 +243,24 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if args.linear:
-        for d in datasets:
-            if d.a is not None:
-                print(f"\n--- Linear Regression Results ({d.name}) ---")
-                print(f"a  = {d.a:.8f} +/- {d.da:.8f}")
-                print(f"b  = {d.b:.8f} +/- {d.db:.8f}")
-                print(f"r  = {d.r:.8f}")
+        
+        csv_counter = 1
+        csv_filename = f"reg{csv_counter:02d}.csv"
+        while os.path.exists(csv_filename):
+            csv_counter += 1
+            csv_filename = f"reg{csv_counter:02d}.csv"
+
+        with open(csv_filename, 'w') as f:
+            f.write("Dataset,a,da,b,db,r\n")
+        
+
+            for d in datasets:
+                if d.a is not None:
+                    print(f"\n--- Linear Regression Results ({d.name}) ---")
+                    print(f"a  = {d.a:.8f} +/- {d.da:.8f}")
+                    print(f"b  = {d.b:.8f} +/- {d.db:.8f}")
+                    print(f"r  = {d.r:.8f}")
+
+                    f.write(f"{d.name},{d.a:.8f},{d.da:.8f},{d.b:.8f},{d.db:.8f},{d.r:.8f}\n")
     #EXECUTION           
     plotf(datasets, args.xlabel, args.ylabel, args.x_exp, args.y_exp, legend=args.legend, show_plot=args.show,padding_m=args.padding, use_tex_font=args.use_tex)
