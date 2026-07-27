@@ -112,6 +112,12 @@ Call `graphmaker` followed by your desired flags.
 * `-xe`, `--x_exp` : Divide X data by 10^exp for the graph (`-xe 3` converts meters to kilometers on the plot, while keeping terminal math in base SI units).
 * `-ye`, `--y_exp` : Divide Y data by 10^exp for the graph.
 * `-p`, `--padding` : Padding multiplier for the regression line extension (Default: 0.1).
+* `-ln`, `--loglog` : Set both axis to log scale.
+* `-eq`, `--equal` : Set equal axis scaling.
+
+### Style & Format Flags
+* `-s`, `--size` : Size of the data markers (Default: 8.0).
+* `-sh`, `--shape` : Marker shape ('circle', 'square', 'star', 'triangle', 'cross',
 
 ### Examples
 
