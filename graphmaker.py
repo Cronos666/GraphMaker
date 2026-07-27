@@ -7,7 +7,7 @@ import matplotlib
 if '--show' not in sys.argv:
     matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib.ticker import ScalarFormatter, LogLocator
+from matplotlib.ticker import ScalarFormatter
 
 
 
@@ -116,9 +116,6 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
     if ln:
         ax.set_xscale('log')
         ax.set_yscale('log')
-        minor_locator = LogLocator(base=10.0, subs=np.arange(2, 10) * 0.1, numticks=666)
-        ax.xaxis.set_minor_locator(minor_locator)
-        ax.yaxis.set_minor_locator(minor_locator)
     if eql:
          ax.axis('equal')
 
