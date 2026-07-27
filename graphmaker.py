@@ -7,7 +7,7 @@ import matplotlib
 if '--show' not in sys.argv:
     matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib.ticker import ScalarFormatter
+from matplotlib.ticker import ScalarFormatter, LogLocator
 
 
 
@@ -88,7 +88,8 @@ class Data:
 def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
           use_tex_font=True, font_size=18, legend=False,
           graph_x=10, graph_y=6, show_plot=False,
-          msize=6, mshape='square', barsize=5, padding_m = 0.5):
+          msize=6, mshape='square', ln=False, eql=True,
+          barsize=5, padding_m = 0.5):
 
     #FONT
     if(use_tex_font):
@@ -108,7 +109,18 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
 
     #FIG
     fig, ax = plt.subplots(figsize=(graph_x, graph_y))
-    ax.grid(True, linestyle='-', alpha=0.7)
+    ax.grid(visible=True, which='major', linestyle='-', alpha=0.7)
+    ax.grid(visible=True, which='minor', linestyle=':', alpha=0.4)
+
+    #SCALE
+    if ln:
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+        minor_locator = LogLocator(base=10.0, subs=np.arange(2, 10) * 0.1, numticks=666)
+        ax.xaxis.set_minor_locator(minor_locator)
+        ax.yaxis.set_minor_locator(minor_locator)
+    if eql:
+         ax.axis('equal')
 
     #LABELS
     ax.set_xlabel(x_label)
@@ -199,6 +211,9 @@ if __name__ == "__main__":
    
     parser.add_argument('-s', '--size', type=float, default=8.0, help="Size of the data markers")
 
+    parser.add_argument('-ln', '--loglog', action='store_true', help="Set both axis to log scale")
+    parser.add_argument('-eq', '--equal', action='store_true', help="Set equal axis scaling")
+
     parser.add_argument('-sh', '--shape', type=str, default='square', help="Marker shape ('circle', 'square', 'star', 'triangle', 'cross', 'pentagon', 'hexagon', 'plus', 'diamond'')")
 
     parser.add_argument('--show', action='store_true', help="Show GUI")
@@ -285,4 +300,4 @@ if __name__ == "__main__":
     plotf(datasets, args.xlabel, args.ylabel, args.x_exp, args.y_exp,
           mshape=args.shape, msize=args.size, legend=args.legend,
           show_plot=args.show, padding_m=args.padding,
-          use_tex_font=args.use_tex)
+          use_tex_font=args.use_tex, ln=args.loglog, eql=args.equal)
