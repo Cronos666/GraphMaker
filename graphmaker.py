@@ -88,7 +88,7 @@ class Data:
 def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
           use_tex_font=True, font_size=18, legend=False,
           graph_x=10, graph_y=6, show_plot=False,
-          msize=8, barsize=5, padding_m = 0.5):
+          msize=6, mshape='square', barsize=5, padding_m = 0.5):
 
     #FONT
     if(use_tex_font):
@@ -121,6 +121,21 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
     x_min = min(min(d.x_data) for d in data_array)
     x_max = max(max(d.x_data) for d in data_array)
     padding = (x_max - x_min)*padding_m
+    
+    #SHAPE
+    shapes = { 
+        'circle': 'o',
+        'square': 's',
+        'triangle': '^',
+        'cross': 'x',
+        'plus': '+',
+        'star': '*',
+        'diamond': 'D',
+        'pentagon': 'p',
+        'hexagon': 'h'
+    }
+
+
 
     for n, data in enumerate(data_array):
         c = color[n%len(color)]
@@ -128,9 +143,9 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
         ax.errorbar(
                 data.x_data/x_scale,
                 data.y_data/y_scale,
-                xerr=data.x_err/x_scale,
-                yerr=data.y_err/y_scale,
-                fmt='s',
+                xerr=(data.x_err/x_scale if np.any(data.x_err) else None),
+                yerr=(data.y_err/y_scale if np.any(data.y_err) else None),
+                fmt=shapes[mshape],
                 color=c, 
                 markerfacecolor=c,
                 markersize=msize,
@@ -160,7 +175,7 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
             counter+=1
             filename = f"fig{counter:02d}.png"
 
-        plt.savefig(filename, dpi=300)
+        plt.savefig(filename, dpi=600)
 
 
 if __name__ == "__main__":
@@ -181,7 +196,11 @@ if __name__ == "__main__":
 
     parser.add_argument('-l', '--linear', action='store_true', help="Calculate linear regression")
     parser.add_argument('-p', '--padding', type=float, default=0.1, help="Padding multiplier for the regression line")
-    
+   
+    parser.add_argument('-s', '--size', type=float, default=8.0, help="Size of the data markers")
+
+    parser.add_argument('-sh', '--shape', type=str, default='square', help="Marker shape ('circle', 'square', 'star', 'triangle', 'cross', 'pentagon', 'hexagon', 'plus', 'diamond'')")
+
     parser.add_argument('--show', action='store_true', help="Show GUI")
 
     parser.add_argument('--no-tex', action='store_false', dest='use_tex', help="Disable LaTeX font rendering")
@@ -263,4 +282,7 @@ if __name__ == "__main__":
 
                     f.write(f"{d.name},{d.a:.8f},{d.da:.8f},{d.b:.8f},{d.db:.8f},{d.r:.8f}\n")
     #EXECUTION           
-    plotf(datasets, args.xlabel, args.ylabel, args.x_exp, args.y_exp, legend=args.legend, show_plot=args.show,padding_m=args.padding, use_tex_font=args.use_tex)
+    plotf(datasets, args.xlabel, args.ylabel, args.x_exp, args.y_exp,
+          mshape=args.shape, msize=args.size, legend=args.legend,
+          show_plot=args.show, padding_m=args.padding,
+          use_tex_font=args.use_tex)
