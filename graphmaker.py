@@ -148,12 +148,15 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
 
     for n, data in enumerate(data_array):
         c = color[n%len(color)]
+        
+        clean_x_err = np.where(data.x_err == 0, np.nan, data.x_err) / x_scale
+        clean_y_err = np.where(data.y_err == 0, np.nan, data.y_err) / y_scale
 
         ax.errorbar(
                 data.x_data/x_scale,
                 data.y_data/y_scale,
-                xerr=(data.x_err/x_scale if np.any(data.x_err) else None),
-                yerr=(data.y_err/y_scale if np.any(data.y_err) else None),
+                xerr=clean_x_err,
+                yerr=clean_y_err,
                 fmt=shapes[mshape],
                 color=c, 
                 markerfacecolor=c,
