@@ -55,7 +55,7 @@ To run GraphMaker from any folder on your system without typing `python3 path/to
 
 1. Copy scripts:
 ```
-ln -s /full/path/to/cloned/repo/graphmaker /home/username/.bin/
+ln -s /full/path/to/cloned/repo/graphmaker.sh /home/username/.bin/graphmaker
 ```
 
 2. Make it executable:
