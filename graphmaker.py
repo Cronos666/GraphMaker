@@ -13,7 +13,7 @@ from matplotlib.ticker import ScalarFormatter
 
 #DATA HANDLER
 class Data:
-    def __init__(self, name, x_data, y_data, x_err=None, y_err=None, linear=False):
+    def __init__(self, name, x_data, y_data, x_err=None, y_err=None, linear=False, is_line=False):
 
         self.name = str(name)
         self.x_data = np.asarray(x_data, dtype=np.float128)
@@ -30,6 +30,7 @@ class Data:
 
 
         self.linear=linear
+        self.is_line = is_line
 
         #LINEAR REG
         self.a = None
@@ -148,24 +149,33 @@ def plotf(data_array, x_label, y_label, x_exp=0, y_exp=0,
 
     for n, data in enumerate(data_array):
         c = color[n%len(color)]
-        
-        clean_x_err = np.where(data.x_err == 0, np.nan, data.x_err) / x_scale
-        clean_y_err = np.where(data.y_err == 0, np.nan, data.y_err) / y_scale
+       
+        if data.is_line:
+            ax.plot(
+            data.x_data/x_scale,
+            data.y_data/y_scale,
+            color=c,
+            linewidth=2,
+            label=data.name
+            )
+        else:
+            clean_x_err = np.where(data.x_err == 0, np.nan, data.x_err) / x_scale
+            clean_y_err = np.where(data.y_err == 0, np.nan, data.y_err) / y_scale
 
-        ax.errorbar(
-                data.x_data/x_scale,
-                data.y_data/y_scale,
-                xerr=clean_x_err,
-                yerr=clean_y_err,
-                fmt=shapes[mshape],
-                color=c, 
-                markerfacecolor=c,
-                markersize=msize,
-                capsize=barsize,
-                capthick=1.5,
-                linestyle='None',
-                label=data.name
-                )
+            ax.errorbar(
+                    data.x_data/x_scale,
+                    data.y_data/y_scale,
+                    xerr=clean_x_err,
+                    yerr=clean_y_err,
+                    fmt=shapes[mshape],
+                    color=c, 
+                    markerfacecolor=c,
+                    markersize=msize,
+                    capsize=barsize,
+                    capthick=1.5,
+                    linestyle='None',
+                    label=data.name
+                    )
 
         if data.linear:
         
@@ -198,6 +208,9 @@ if __name__ == "__main__":
 
     parser.add_argument('-f', '--files', type=str, nargs='+', required=True, 
                         help="Path to one or more CSV file")
+    parser.add_argument('-lf', '--line-files', type=str, nargs='+', default=[],
+                    help="Path to CSV files to plot as continuous lines")
+
 
     parser.add_argument('-n', '--names', type=str, nargs='+', help="Names of datasets")
     parser.add_argument('-xl', '--xlabel', type=str, default="x", help="Label for the X axis")
@@ -214,7 +227,8 @@ if __name__ == "__main__":
     parser.add_argument('-ln', '--loglog', action='store_true', help="Set both axis to log scale")
     parser.add_argument('-eq', '--equal', action='store_true', help="Set equal axis scaling")
 
-    parser.add_argument('-sh', '--shape', type=str, default='square', help="Marker shape ('circle', 'square', 'star', 'triangle', 'cross', 'pentagon', 'hexagon', 'plus', 'diamond'')")
+    parser.add_argument('-sh', '--shape', type=str, default='square',
+                        help="Marker shape ('circle', 'square', 'star', 'triangle', 'cross', 'pentagon', 'hexagon', 'plus', 'diamond'')")
 
     parser.add_argument('--show', action='store_true', help="Show GUI")
 
@@ -253,6 +267,7 @@ if __name__ == "__main__":
             print("Wrong CSV formatiing. Skipping file")
             continue
 
+
         if args.names and i < len(args.names):
             current_name = args.names[i]
         else:
@@ -266,9 +281,44 @@ if __name__ == "__main__":
                 y_data=y,
                 x_err=x_err,
                 y_err=y_err,
-                linear=args.linear
+                linear=args.linear,
             )
-            datasets.append(dataset) # Add the finished object to our list
+            datasets.append(dataset) # Add the finished object to list
+        except ValueError as e:
+            print(f"Error processing '{file_path}': {e}")
+
+    for i, file_path in enumerate(args.line_files):
+        try:
+            raw_data = np.loadtxt(file_path, delimiter=',', skiprows=1)
+        except Exception as e:
+            print(f"Error reading '{file_path}': {e}. Skipping")
+            continue
+
+        num_columns = raw_data.shape[1]
+        
+        if (num_columns >= 4):
+            x, y = raw_data[:, 0], raw_data[:, 2]
+        elif (num_columns > 1):
+            x, y = raw_data[:, 0], raw_data[:, 1]
+        else:
+            print("Wrong CSV formatting. Skipping file")
+            continue
+
+        # Offset naming for line files so they don't steal scatter names
+        offset = len(args.files)
+        if args.names and (i + offset) < len(args.names):
+            current_name = args.names[i + offset]
+        else:
+            current_name = file_path.replace('.csv', '').replace('_', ' ')
+
+        try:
+            dataset = Data(
+                name=current_name,
+                x_data=x,
+                y_data=y,
+                is_line=True # This forces it to plot as a line
+            )
+            datasets.append(dataset)
         except ValueError as e:
             print(f"Error processing '{file_path}': {e}")
 
