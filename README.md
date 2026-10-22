@@ -55,10 +55,7 @@ To run GraphMaker from any folder on your system without typing `python3 path/to
 
 1. Copy scripts:
 ```
-cp graphmaker ~/.bin/
-```
-```
-cp graphmaker.py ~/.bin/
+ln -s /full/path/to/cloned/repo/graphmaker /home/username/.bin/
 ```
 
 2. Make it executable:
@@ -100,6 +97,7 @@ Call `graphmaker` followed by your desired flags.
 
 ### Core Flags
 * `-f`, `--files` : Path to one or more CSV files (Required).
+* `-f`, `--files` : Path to CSV files to plot as lines (for line of best fit).
 * `-n`, `--names` : Custom names for the legend. Defaults to the filename if omitted.
 * `-l`, `--linear` : Calculate and plot linear regression.
 * `--show` : Open the interactive GUI instead of saving silently to disk.

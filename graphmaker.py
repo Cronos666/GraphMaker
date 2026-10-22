@@ -209,7 +209,7 @@ if __name__ == "__main__":
     parser.add_argument('-f', '--files', type=str, nargs='+', required=True, 
                         help="Path to one or more CSV file")
     parser.add_argument('-lf', '--line-files', type=str, nargs='+', default=[],
-                    help="Path to CSV files to plot as continuous lines")
+                    help="Path to CSV files to plot as lines (for line of best fit)")
 
 
     parser.add_argument('-n', '--names', type=str, nargs='+', help="Names of datasets")
